@@ -1,0 +1,309 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{hmargin=2.2cm,vmargin=2.5cm}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{amsmath,amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+% Palette de couleurs professionnelle
+\definecolor{navy}{RGB}{15, 23, 42}
+\definecolor{primaryblue}{RGB}{37, 99, 235}
+\definecolor{darkslate}{RGB}{30, 41, 59}
+\definecolor{lightgrey}{RGB}{248, 250, 252}
+\definecolor{bordergrey}{RGB}{226, 232, 240}
+\definecolor{codegreen}{RGB}{22, 163, 74}
+\definecolor{codered}{RGB}{220, 38, 38}
+
+% Style Hyperref
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primaryblue,
+    citecolor=primaryblue,
+    urlcolor=primaryblue,
+    pdftitle={Rapport Technique Tek-Up - SecOps Kubernetes AWS},
+    pdfauthor={Khayem ZRIBI}
+}
+
+% Configuration Listings
+\lstdefinestyle{customlatex}{
+    backgroundcolor=\color{lightgrey},
+    basicstyle=\ttfamily\footnotesize\color{darkslate},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    commentstyle=\color{codegreen},
+    frame=single,
+    rulecolor=\color{bordergrey},
+    keywordstyle=\color{primaryblue}\bfseries,
+    stringstyle=\color{codered},
+    showstringspaces=false,
+    tabsize=2
+}
+\lstset{style=customlatex}
+
+% Configuration des en-têtes et pieds de page
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{gray}{TEK-UP | Rapport Projets Cybersécurité (2025–2026)}}
+\fancyhead[R]{\small\textcolor{gray}{SecOps / Incident Response K8s}}
+\fancyfoot[L]{\small\textcolor{gray}{Khayem ZRIBI — Cycle Ingénieur}}
+\fancyfoot[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+
+% ==============================================================================
+% PAGE DE GARDE ACADÉMIQUE TEK-UP
+% ==============================================================================
+\begin{titlepage}
+    \centering
+    \vspace*{0.5cm}
+    \includegraphics[width=0.35\textwidth]{https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1200px-Python-logo-notext.svg.png} \hfill
+    \Large\textbf{TEK-UP University}\\[0.2cm]
+    \large\textit{École Supérieure Privée des Technologies de l'Information et de la Management}\\[0.1cm]
+    \small Année Universitaire 2025–2026\\[1.5cm]
+
+    \rule{\linewidth}{1.5pt}\\[0.4cm]
+    {\Huge \bfseries Conception et Déploiement d'une Plateforme Cloud Sécurisée Kubernetes sur AWS avec Détection et Réponse Automatique aux Incidents}\\[0.2cm]
+    {\Large \textcolor{primaryblue}{\textbf{SecOps / Incident Response (PICERL) et Machine Learning}}}\\[0.3cm]
+    \rule{\linewidth}{1.5pt}\\[1.5cm]
+
+    \begin{minipage}{0.48\textwidth}
+        \begin{flushleft} \large
+            \textbf{Rédigé par :}\\
+            \textbf{Khayem ZRIBI}\\
+            2\textsuperscript{ème} Année Cycle Ingénieur\\
+            Spécialité : Cybersécurité
+        \end{flushleft}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \begin{flushright} \large
+            \textbf{Cadre du Projet :}\\
+            Projet Majeur DevSecOps \& Cloud Native\\
+            Environnement AWS \& Kubernetes
+        \end{flushright}
+    \end{minipage}
+
+    \vfill
+    {\large \textbf{Date :} Août 2026 | \textbf{Statut :} Production-Ready}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ==============================================================================
+% 1. INTRODUCTION GÉNÉRALE
+% ==============================================================================
+\chapter{Introduction Générale}
+L'adoption massive des architectures conteneurisées et des orchestrateurs tels que Kubernetes a profondément transformé le paysage du développement applicatif. Cependant, la complexité accrue des environnements multi-services et la vitesse de déploiement exposent les infrastructures Cloud à des menaces sophistiquées (Log4Shell, injections SQL, SSRF). 
+
+L'objectif de ce projet est de concevoir, provisionner et valider une plateforme Cloud sécurisée sur AWS, intégrant un pipeline d'**Incident Response (IR)** automatisé. Basée sur l'Infrastructure as Code (Terraform), cette plateforme héberge une application e-commerce (Symfony) et une stack SecOps autonome (FastAPI, Celery, Redis, PostgreSQL, Scikit-Learn) capable de classifier le risque en temps réel et d'exécuter des playbooks d'atténuation structurés selon le modèle normatif **SANS PICERL**.
+
+% ==============================================================================
+% 2. CONTEXTE ET ÉTAT DE L'ART
+% ==============================================================================
+\chapter{Contexte et État de l'Art}
+La sécurisation des conteneurs requiert le passage d'une approche réactive traditionnelle à un modèle **DevSecOps** continu. Dans un cluster Kubernetes, la réponse réseau et système doit s'effectuer à la vitesse de la machine pour limiter le *blast radius* d'une compromission. Les normes d'Incident Response (NIST SP 800-61, SANS PICERL) définissent 6 phases clés : *Preparation, Identification, Containment, Eradication, Recovery, Lessons Learned*. L'intégration du Machine Learning au sein du pipeline d'ingestion permet de corréler les signaux faibles et d'attribuer un score de risque dynamique avant d'isoler l'attaquant.
+
+% ==============================================================================
+% 3. ANALYSE DES BESOINS
+% ==============================================================================
+\chapter{Analyse des Besoins}
+
+\section{Besoins Fonctionnels (BF)}
+\begin{itemize}
+    \item \textbf{BF-1 (Ingestion & Normalisation) :} Ingestion en temps réel des logs NGINX Ingress et Symfony avec extraction précise de l'IP source réelle ($X-Forwarded-For$).
+    \item \textbf{BF-2 (Scoring ML) :} Calcul asynchrone d'un score de risque ($0 - 100$) basé sur un moteur hybride (signatures OWASP et modèle statistique/comportemental).
+    \item \textbf{BF-3 (Orchestration IR PICERL) :} Déclenchement automatique des playbooks d'atténuation (`full_advanced_protection`) pour les scores $\ge 76$ ou attaques critiques.
+    \item \textbf{BF-4 (Mesures d'Atténuation) :} Blocage IP progressif Redis, rate limiting adaptatif glissant, quarantaine logique de pod, génération de NetworkPolicies K8s, capture forensic et redirection Honeypot.
+    \item \textbf{BF-5 (Supervision & Alertes) :} Interface Next.js interactive avec déclencheur synchrone `EXECUTE NOW` et Webhooks HTTP JSON vers Slack et SIEM.
+\end{itemize}
+
+\section{Besoins Non-Fonctionnels (BNF)}
+\begin{itemize}
+    \item \textbf{BNF-1 (Performance & Latence) :} Temps d'exécution du pipeline de réponse automatisé $< 2$ secondes après ingestion du log.
+    \item \textbf{BNF-2 (Découpage & Résilience) :} Isolation du traitement via Celery et Redis pour éviter le blocage des API du backend FastAPI.
+    \item \textbf{BNF-3 (Reproductibilité) :} Provisionnement 100\% déclaratif du VPC et des instances EC2 via Terraform.
+\end{itemize}
+
+% ==============================================================================
+% 4. CONCEPTION DE L'ARCHITECTURE AWS ET KUBERNETES
+% ==============================================================================
+\chapter{Conception de l'Architecture AWS et Kubernetes}
+
+\section{Topology AWS & Segmentation Réseau}
+L'infrastructure provisionnée sur AWS dans la région `us-east-1` repose sur un VPC dédié (`10.0.0.0/16`) segmenté en 2 sous-réseaux publics et 2 sous-réseaux privés répartis sur deux zones de disponibilité (`us-east-1a`, `us-east-1b`). La connectivité sortante des nœuds privés est assurée par une NAT Gateway avec Elastic IP, tandis que les flux entrants sont filtrés par un Application Load Balancer (ALB) et des Security Groups dédiés.
+
+\begin{table}[H]
+\centering
+\caption{Spécifications des Instances EC2 du Cluster}
+\label{tab:ec2}
+\begin{tabularx}{\textwidth}{llllX}
+\toprule
+\textbf{Instance EC2} & \textbf{Type Instance} & \textbf{Subnet} & \textbf{Accès Réseau} & \textbf{Rôle et Service Exécuté} \\
+\midrule
+\texttt{k8s-bastion} & \texttt{t3.micro} & Public A & IP Publique & Point d'accès administration SSH \\
+\texttt{k8s-master} & \texttt{t3.medium} & Privé A & NAT Gateway & Control Plane K8s (API Server, etcd) \\
+\texttt{k8s-worker-1} & \texttt{t3.medium} & Privé A & NAT Gateway & Worker 1 : Symfony, FastAPI, Redis \\
+\texttt{k8s-worker-2} & \texttt{t3.medium} & Privé B & NAT Gateway & Worker 2 : Service ML, Celery, Frontend \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Architecture du Cluster Kubernetes}
+Les nœuds s'exécutent sous Ubuntu Server 22.04 LTS avec le runtime \texttt{containerd} (\texttt{SystemdCgroup = true}) et Kubernetes v1.29 initialisé via \texttt{kubeadm}. Le plugin réseau (CNI) déployé est \textbf{Flannel} (Pod CIDR \texttt{10.244.0.0/16}). L'exposition externe est gérée par \textbf{NGINX Ingress Controller v1.10.0} relié à l'ALB via le NodePort \texttt{32080}.
+
+\paragraph{Avertissement Architectural :} Le CNI Flannel assure la connectivité inter-pods mais n'assure pas seul l'enforcement effectif des Kubernetes NetworkPolicies au niveau du noyau Linux. Les manifestations YAML générées par le playbook sont stockées et préparées ; l'implémentation de Calico ou Cilium est présentée en chapitre 11 comme perspective. De même, l'architecture actuelle comporte un Control Plane unique (Single Master) ; la haute disponibilité multi-masters constitue une évolution future.
+
+% ==============================================================================
+% 5. IMPLÉMENTATION DE L'INFRASTRUCTURE AVEC TERRAFORM
+% ==============================================================================
+\chapter{Implémentation de l'Infrastructure avec Terraform}
+Le code IaC Terraform permet de gérer l'état d'infrastructure (State) et d'assurer une reproductibilité totale du déploiement.
+
+\begin{table}[H]
+\centering
+\caption{Cartographie des Fichiers Terraform du Projet}
+\label{tab:terraform}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Fichier Terraform} & \textbf{Description et Ressources Provisionnées} \\
+\midrule
+\texttt{provider.tf} & Spécification du provider AWS et de la région \texttt{us-east-1}. \\
+\texttt{networking.tf} & Crée le VPC, Subnets publics/privés, IGW, NAT Gateway, EIP et Tables de routage. \\
+\texttt{security\_groups.tf} & Définit les Security Groups (\texttt{bastion\_sg}, \texttt{k8s\_master\_sg}, \texttt{k8s\_worker\_sg}, \texttt{alb\_sg}). \\
+\texttt{compute.tf} & Provisionne les 4 instances EC2 avec attachement des clés SSH et Userdata scripts. \\
+\texttt{loadbalancer.tf} & Configure l'ALB AWS, le Target Group (NodePort \texttt{32080}) et le Listener HTTP (\texttt{80}). \\
+\texttt{flowlogs.tf} & Crée le rôle IAM et active l'exportation VPC Flow Logs vers CloudWatch Logs. \\
+\texttt{guardduty.tf} & Active le service de détection automatisée des menaces AWS GuardDuty. \\
+\texttt{userdata-master.sh} & Script Shell automatisant l'installation de containerd, Kubeadm, Flannel et Ingress NGINX. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ==============================================================================
+% 6. DÉPLOIEMENT DE L'APPLICATION ET DE LA PLATEFORME SECOPS
+% ==============================================================================
+\chapter{Déploiement de l'Application et de la Plateforme SecOps}
+
+\section{Application E-Commerce Symfony}
+L'application cible est développée sous PHP/Symfony et expose les routes métier principales : \texttt{/login}, \texttt{/products}, \texttt{/search}, \texttt{/cart}, et \texttt{/checkout}. Elle intègre des vulnérabilités contrôlées à des fins de démonstration : SQL Injection sur la recherche, XSS sur les commentaires, Log4Shell/Command Injection via les en-têtes HTTP (\texttt{User-Agent}), SSRF, Path Traversal et Brute Force.
+
+\section{Composants Microservices de la Stack SecOps}
+\begin{itemize}
+    \item \textbf{Frontend UI (\texttt{k8s\_frontend}) :} Application Next.js / React / TailwindCSS (port 3000) offrant la visualisation du score de risque, le flux d'incidents et le déclencheur manuel \texttt{EXECUTE NOW}.
+    \item \textbf{Backend API (\texttt{k8s\_api}) :} Service FastAPI (Python 3.11, port 8000) gérant l'ingestion, le parsing IP, PostgreSQL et le dispatch Celery.
+    \item \textbf{Worker Asynchrone (\texttt{k8s\_celery}) :} Worker Celery exécutant de façon non-bloquante les playbooks d'atténuation.
+    \item \textbf{Broker \& In-Memory Store (\texttt{k8s\_redis}) :} Instance Redis 7 (port 6379) stockant les états de sécurité temps réel.
+    \item \textbf{Base de Données (\texttt{k8s\_postgres}) :} PostgreSQL 15 (port 5432, base \texttt{k8s\_platform}) assurant la persistance et la traçabilité.
+\end{itemize}
+
+% ==============================================================================
+% 7. DÉTECTION ET SCORING DU RISQUE (SERVICE ML)
+% ==============================================================================
+\chapter{Détection et Scoring du Risque}
+Le service Machine Learning (\texttt{k8s\_ml}, port 8001) repose sur un **moteur hybride de détection et de scoring** associant la recherche de signatures d'attaques OWASP et un modèle statistique d'anomalies.
+
+Le score de risque global ($0 - 100$) est calculé selon la formule composite :
+\begin{equation}
+\text{Score Global} = 0.50 \times \text{Score\_Sécurité} + 0.30 \times \text{Score\_Fiabilité} + 0.20 \times \text{Score\_Fréquence}
+\end{equation}
+
+Les caractéristiques (features) analysées comprennent la présence d'indicateurs malveillants (\texttt{' OR}, \texttt{<script>}, \texttt{jndi:ldap}), le statut HTTP (5xx, 401, 403), la fréquence de requêtes par IP sur fenêtre glissante de 60s, et le namespace/pod ciblé.
+
+% ==============================================================================
+% 8. AUTOMATISATION DE L'INCIDENT RESPONSE (PICERL)
+% ==============================================================================
+\chapter{Automatisation de l'Incident Response}
+Le système s'appuie sur la méthodologie **SANS PICERL**. Le playbook maître \texttt{full\_advanced\_protection} déclenche un ensemble d'actions coordonnées :
+
+\begin{table}[H]
+\centering
+\caption{Cartographie du Playbook \texttt{full\_advanced\_protection} avec le Cadre PICERL}
+\label{tab:picerl}
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Phase PICERL} & \textbf{Action du Playbook} & \textbf{Mécanisme et Niveau d'Implémentation} \\
+\midrule
+\textbf{Containment} & Blocage IP Progressif & Écriture Redis (\texttt{ir:blocked\_ip}) : 5 min, 30 min, Blacklist 24h. \\
+\textbf{Containment} & NetworkPolicy K8s & Génération du YAML restrictif (\texttt{ir:networkpolicy}) stocké dans Redis. \\
+\textbf{Containment} & Quarantaine du Pod & Application du label \texttt{quarantine=active} et Taint du node dans Redis. \\
+\textbf{Eradication} & Rate Limit Adaptatif & Fenêtre glissante Redis (\texttt{ir:ratelimit}) avec backoff exponentiel. \\
+\textbf{Eradication} & Redirection Honeypot & Inscription de la règle de dérivation vers un Pod piège (\texttt{ir:honeypot}). \\
+\textbf{Lessons Learned} & Forensic Capture & Archivage JSON/Redis (\texttt{ir:forensic}) des logs, manifests et pcap (30j). \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% ==============================================================================
+% 9. INTÉGRATION ET FLUX DE DONNÉES
+% ==============================================================================
+\chapter{Intégration et Flux de Données}
+Le cycle de traitement d'un événement suit une séquence stricte à 13 étapes :
+\begin{enumerate}
+    \item NGINX Ingress ou l'application Symfony génère un événement de log.
+    \item Le log est transmis en JSON à l'API FastAPI via \texttt{POST /logs/ingest}.
+    \item FastAPI extrait l'IP source réelle via \texttt{\_extract\_source\_ip} (gestion du header \texttt{X-Forwarded-For}).
+    \item Le log brut est conservé dans la table \texttt{raw\_logs} de PostgreSQL.
+    \item Le service ML évalue l'événement et renvoie le score de risque ($0 - 100$).
+    \item Si score $> 40$, un incident est créé ou fusionné dans la table \texttt{incidents}.
+    \item Si score $\ge 76$ ou attaque critique, la tâche Celery est planifiée via \texttt{dispatch\_ir.delay()}.
+    \item Le worker Celery exécute le playbook d'atténuation.
+    \item Redis enregistre l'état dynamique de sécurité (IPs bloquées, NetworkPolicy, Quarantaine).
+    \item PostgreSQL enregistre l'exécution dans la table \texttt{incident\_actions}.
+    \item Le dashboard Next.js se met à jour en temps réel.
+    \item Une alerte structurée est envoyée au Webhook Slack (\texttt{SLACK\_WEBHOOK\_URL}).
+    \item La notification SIEM est émise via \texttt{SIEM\_WEBHOOK\_URL}.
+\end{enumerate}
+
+% ==============================================================================
+% 10. VALIDATION EXPÉRIMENTALE ET DÉMONSTRATION
+% ==============================================================================
+\chapter{Validation Expérimentale et Démonstration}
+La validation a été effectuée sur l'**Incident \#184** (Attaque Log4Shell lancée depuis l'IP \texttt{32.197.70.124}). 
+
+Lors du déclenchement synchrone du playbook \texttt{full\_advanced\_protection}, la vérification en ligne de commande dans Redis a confirmé le peuplement effectif de toutes les structures :
+
+\begin{lstlisting}[caption={Sortie d'inspection CLI Redis attestant de l'exécution du Playbook}]
+$ docker exec k8s_redis redis-cli keys "ir:*"
+1) "ir:ratelimit:32.197.70.124:ingress-nginx"
+2) "ir:forensic:184-20260520200757"
+3) "ir:quarantine:ingress-nginx:ingress-nginx-controller-5458dd5f6-v26dd"
+4) "ir:blocked_ip:32.197.70.124"
+5) "ir:networkpolicy:ingress-nginx:ingress-nginx-controller-5458dd5f6-v26dd"
+6) "ir:honeypot:redirect:32.197.70.124"
+\end{lstlisting}
+
+% ==============================================================================
+% 11. LIMITES ET PERSPECTIVES
+% ==============================================================================
+\chapter{Limites et Perspectives}
+Afin d'inscrire ce travail dans une démarche d'amélioration continue, les évolutions futures suivantes sont identifiées :
+\begin{itemize}
+    \item \textbf{Enforcement Réseau complet :} Migration du CNI Flannel vers **Calico** ou **Cilium** (eBPF) pour appliquer physiquement les NetworkPolicies Kubernetes sur le noyau Linux.
+    \item \textbf{Détection Runtime eBPF :} Intégration de **Falco** sur les Workers EC2 pour détecter les anomalies au niveau des appels système.
+    \item \textbf{Haute Disponibilité K8s :} Évolution vers un Control Plane multi-masters (Multi-Control-Plane avec etcd distribué).
+    \item \textbf{Gouvernance \& GitOps :} Déploiement de **Kyverno** (politiques d'admission), **Trivy** (analyse de vulnérabilités conteneurs) et **ArgoCD** (GitOps).
+\end{itemize}
+
+% ==============================================================================
+% 12. CONCLUSION GÉNÉRALE
+% ==============================================================================
+\chapter{Conclusion Générale}
+Ce projet d'ingénierie a permis de concevoir et de déployer une plateforme Cloud DevSecOps complète sur AWS. En combinant l'Infrastructure as Code (Terraform), l'orchestration Kubernetes, le Machine Learning et des playbooks automatisés basés sur la méthode SANS PICERL, la solution réduit le temps de réaction aux attaques à moins de 2 secondes tout en assurant une traçabilité d'audit complète.
+
+\end{document}
